@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Api Layer/">
+    <Project Path="OpteamixEmployeeManagementSystem.API/OpteamixEmployeeManagementSystem.API.csproj" />
+  </Folder>
+  <Folder Name="/Data Layer/">
+    <Project Path="OpteamixEmployeeManagementSystem.Data/OpteamixEmployeeManagementSystem.Data.csproj" />
+  </Folder>
+  <Folder Name="/Domain Layer/">
+    <Project Path="OpteamixEmployeeManagementSystem.Domain/OpteamixEmployeeManagementSystem.Domain.csproj" />
+  </Folder>
+</Solution>

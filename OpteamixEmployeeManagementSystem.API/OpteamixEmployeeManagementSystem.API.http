@@ -1,0 +1,6 @@
+@OpteamixEmployeeManagementSystem.API_HostAddress = http://localhost:5017
+
+GET {{OpteamixEmployeeManagementSystem.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
