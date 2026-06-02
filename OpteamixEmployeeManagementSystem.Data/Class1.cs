@@ -1,7 +1,7 @@
 ﻿namespace OpteamixEmployeeManagementSystem.Data
 {
     /// <summary>
-    /// changed
+    /// changed in feature 1 branch
     /// </summary>
     public class Class1
     {
