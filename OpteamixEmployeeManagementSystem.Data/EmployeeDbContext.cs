@@ -9,7 +9,7 @@ namespace OpteamixEmployeeManagementSystem.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Integrated Security=True; Initial Catalog=OpteamixEmployeeDbComplex;");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Integrated Security=True; Initial Catalog=OpteamixEmployeeDb;");
         }
         
     }
