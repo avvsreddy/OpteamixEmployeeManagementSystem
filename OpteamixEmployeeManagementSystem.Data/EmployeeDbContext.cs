@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using OpteamixEmployeeManagementSystem.Domain.Entities;
 
 namespace OpteamixEmployeeManagementSystem.Data
 {
-    internal class EmployeeDbContext : DbContext
+    public class EmployeeDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public EmployeeDbContext(
+            DbContextOptions<EmployeeDbContext> options)
+            : base(options)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Integrated Security=True; Initial Catalog=OpteamixEmployeeDb;");
         }
-        
+
+        public DbSet<Employee> Employees { get; set; }
     }
 }
