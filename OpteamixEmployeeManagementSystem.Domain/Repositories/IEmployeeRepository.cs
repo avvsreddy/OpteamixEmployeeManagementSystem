@@ -4,14 +4,14 @@ namespace OpteamixEmployeeManagementSystem.Domain.Repositories
 {
     public interface IEmployeeRepository
     {
-        List<Employee> GetEmployees();
+        Task<List<Employee>> GetEmployeesAsync();
 
-        Employee? GetEmployeeById(int employeeId);
+        Task<Employee?> GetEmployeeByIdAsync(int employeeId);
 
-        Employee AddEmployee(Employee employee);
+        Task<Employee> AddEmployeeAsync(Employee employee);
 
-        Employee UpdateEmployee(Employee employee);
+        Task<Employee> UpdateEmployeeAsync(Employee employee);
 
-        bool DeleteEmployee(int employeeId);
+        Task<bool> DeleteEmployeeAsync(int employeeId);
     }
 }

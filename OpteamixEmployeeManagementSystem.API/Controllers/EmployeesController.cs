@@ -10,25 +10,27 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
     {
         private readonly IEmployeeRepository _repository;
 
-        public EmployeesController
-        (
-            IEmployeeRepository repository
-        )
+        public EmployeesController(
+            IEmployeeRepository repository)
         {
             _repository = repository;
         }
 
         [HttpGet]
-        public IActionResult GetEmployees()
+        public async Task<IActionResult> GetEmployees()
         {
-            return Ok(_repository.GetEmployees());
+            var employees =
+                await _repository.GetEmployeesAsync();
+
+            return Ok(employees);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetEmployeeById(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetEmployeeById(int id)
         {
             var employee =
-                _repository.GetEmployeeById(id);
+                await _repository.GetEmployeeByIdAsync(id);
 
             if (employee == null)
                 return NotFound();
@@ -37,30 +39,41 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEmployee(Employee employee)
+        public async Task<IActionResult> AddEmployee(
+            Employee employee)
         {
-            return Ok
-            (
-                _repository.AddEmployee(employee)
-            );
+            var result =
+                await _repository.AddEmployeeAsync(employee);
+
+            return Ok(result);
         }
 
         [HttpPut]
-        public IActionResult UpdateEmployee(Employee employee)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateEmployee(
+            int id,
+            Employee employee)
         {
-            return Ok
-            (
-                _repository.UpdateEmployee(employee)
-            );
+            if (id != employee.EmployeeId)
+            {
+                return BadRequest(
+                    "Employee ID mismatch");
+            }
+
+            var result =
+                await _repository.UpdateEmployeeAsync(employee);
+
+            return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteEmployee(int id)
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteEmployee(int id)
         {
-            return Ok
-            (
-                _repository.DeleteEmployee(id)
-            );
+            var result =
+                await _repository.DeleteEmployeeAsync(id);
+
+            return Ok(result);
         }
     }
 }

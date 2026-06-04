@@ -1,54 +1,45 @@
-﻿using OpteamixEmployeeManagementSystem.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.Data.Repository
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private static List<Employee> employees =
-        [
-            new Employee
-            {
-                EmployeeId = 1,
-                Name = "John",
-                Email = "john@gmail.com",
-                PhoneNumber = "9876543210",
-                Department = "IT",
-                Designation = "Developer",
-                JoiningDate = DateTime.Now
-            }
-        ];
+        private readonly EmployeeDbContext _context;
 
-        public List<Employee> GetEmployees()
+        public EmployeeRepository(EmployeeDbContext context)
         {
-            return employees;
+            _context = context;
         }
 
-        public Employee? GetEmployeeById(int employeeId)
+        public async Task<List<Employee>> GetEmployeesAsync()
         {
-            return employees.FirstOrDefault
-            (
-                e => e.EmployeeId == employeeId
-            );
+            return await _context.Employees.ToListAsync();
         }
 
-        public Employee AddEmployee(Employee employee)
+        public async Task<Employee?> GetEmployeeByIdAsync(int employeeId)
         {
-            employee.EmployeeId =
-                employees.Max(e => e.EmployeeId) + 1;
+            return await _context.Employees
+                .FirstOrDefaultAsync(
+                    e => e.EmployeeId == employeeId);
+        }
 
-            employees.Add(employee);
+        public async Task<Employee> AddEmployeeAsync(Employee employee)
+        {
+            await _context.Employees.AddAsync(employee);
+
+            await _context.SaveChangesAsync();
 
             return employee;
         }
 
-        public Employee UpdateEmployee(Employee employee)
+        public async Task<Employee> UpdateEmployeeAsync(Employee employee)
         {
             var existingEmployee =
-                employees.FirstOrDefault
-                (
-                    e => e.EmployeeId == employee.EmployeeId
-                );
+                await _context.Employees
+                .FirstOrDefaultAsync(
+                    e => e.EmployeeId == employee.EmployeeId);
 
             if (existingEmployee != null)
             {
@@ -58,23 +49,26 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                 existingEmployee.Department = employee.Department;
                 existingEmployee.Designation = employee.Designation;
                 existingEmployee.JoiningDate = employee.JoiningDate;
+
+                await _context.SaveChangesAsync();
             }
 
             return employee;
         }
 
-        public bool DeleteEmployee(int employeeId)
+        public async Task<bool> DeleteEmployeeAsync(int employeeId)
         {
             var employee =
-                employees.FirstOrDefault
-                (
-                    e => e.EmployeeId == employeeId
-                );
+                await _context.Employees
+                .FirstOrDefaultAsync(
+                    e => e.EmployeeId == employeeId);
 
             if (employee == null)
                 return false;
 
-            employees.Remove(employee);
+            _context.Employees.Remove(employee);
+
+            await _context.SaveChangesAsync();
 
             return true;
         }
