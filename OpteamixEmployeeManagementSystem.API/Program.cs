@@ -13,7 +13,9 @@ namespace OpteamixEmployeeManagementSystem.API
 
             builder.Services.AddControllers();
 
-            builder.Services.AddOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<EmployeeDbContext>(
                 options =>
@@ -29,7 +31,9 @@ namespace OpteamixEmployeeManagementSystem.API
 
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
