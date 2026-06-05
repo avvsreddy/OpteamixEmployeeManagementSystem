@@ -8,4 +8,7 @@
   <Folder Name="/Domain Layer/">
     <Project Path="OpteamixEmployeeManagementSystem.Domain/OpteamixEmployeeManagementSystem.Domain.csproj" />
   </Folder>
+  <Folder Name="/Entities/">
+    <Project Path="EntitiesLibrary/EntitiesLibrary.csproj" Id="9dc3b236-9816-4bd9-bfc0-ec4dc4927ce3" />
+  </Folder>
 </Solution>
