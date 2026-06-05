@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
+using System.Text.Json.Serialization;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -11,7 +12,12 @@ namespace OpteamixEmployeeManagementSystem.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters
+            .Add(new JsonStringEnumConverter());
+    });
 
             builder.Services.AddEndpointsApiExplorer();
 
@@ -23,9 +29,15 @@ namespace OpteamixEmployeeManagementSystem.API
                     builder.Configuration.GetConnectionString(
                         "DefaultConnection")));
 
+            // Employee Repository
             builder.Services.AddScoped<
                 IEmployeeRepository,
                 EmployeeRepository>();
+
+            // Task Repository
+            builder.Services.AddScoped<
+                ITaskRepository,
+                TaskRepository>();
 
             var app = builder.Build();
 
