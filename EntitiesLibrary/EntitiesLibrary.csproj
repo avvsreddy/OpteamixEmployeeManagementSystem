@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.8" />
+    <Compile Remove="ProjectDbContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ProjectDbContext.cs" />
   </ItemGroup>
 
 </Project>

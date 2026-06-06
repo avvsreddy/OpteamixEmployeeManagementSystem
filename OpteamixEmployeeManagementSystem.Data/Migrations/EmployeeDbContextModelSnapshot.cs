@@ -58,6 +58,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                     b.ToTable("Employees");
                 });
 
+
             modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.TaskItem", b =>
                 {
                     b.Property<int>("TaskId")
@@ -90,7 +91,56 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
                     b.ToTable("Tasks");
                 });
-#pragma warning restore 612, 618
-        }
+
+            modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Project", b =>
+                        {
+                            b.Property<int>("ProjectId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
+
+                            b.Property<decimal>("Budget")
+                                .HasColumnType("decimal(18,2)");
+
+                            b.Property<string>("ClientName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b.Property<DateTime>("EndDate")
+                                .HasColumnType("datetime2");
+
+                            b.Property<int?>("ManagerId")
+                                .HasColumnType("int");
+
+                            b.Property<string>("ProjectName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b.Property<DateTime>("StartDate")
+                                .HasColumnType("datetime2");
+
+                            b.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b.HasKey("ProjectId");
+
+                            b.HasIndex("ManagerId");
+
+                            b.ToTable("Projects");
+                        });
+
+                    modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Project", b =>
+                        {
+                            b.HasOne("OpteamixEmployeeManagementSystem.Domain.Entities.Employee", "Manager")
+                                .WithMany()
+                                .HasForeignKey("ManagerId");
+
+                            b.Navigation("Manager");
+
+                        });
+
+                }
     }
-}
+    }
