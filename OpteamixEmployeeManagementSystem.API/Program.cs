@@ -29,10 +29,7 @@ namespace OpteamixEmployeeManagementSystem.API
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Your Module 1 - ApplicationDbContext
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
+            
 
             // Identity - Your Module 1
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -43,7 +40,7 @@ namespace OpteamixEmployeeManagementSystem.API
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
             })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<EmployeeDbContext>()
             .AddDefaultTokenProviders();
 
             builder.Services.ConfigureApplicationCookie(options =>
