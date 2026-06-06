@@ -27,6 +27,9 @@ namespace OpteamixEmployeeManagementSystem.Data
 
             modelBuilder.Entity<TaskItem>()
                 .HasKey(t => t.TaskId);
+            modelBuilder.Entity<Project>()
+    .Property(p => p.Budget)
+    .HasColumnType("decimal(18,2)");
         }
     }
 }
