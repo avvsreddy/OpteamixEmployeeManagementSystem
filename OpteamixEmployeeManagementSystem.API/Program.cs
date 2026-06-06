@@ -87,7 +87,7 @@ namespace OpteamixEmployeeManagementSystem.API
             // Repositories - Original GitHub code kept
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
