@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class ReportController : Controller
     {
+        
         private readonly IReportRepository _repository;
 
         public ReportController(IReportRepository repository)
@@ -20,13 +24,37 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             return Ok(count);
         }
 
-        [HttpGet("total-projects")]
+        [HttpGet]
+        [Route("total-projects")]
         public async Task<IActionResult> GetTotalProjects()
         {
             var count = await _repository.GetTotalProjectsAsync();
             return Ok(count);
         }
-        [HttpGet("project-status")]
+        [HttpGet]
+        [Route("total-tasks")]
+        public async Task<IActionResult> GetTotalTasks()
+        {
+            var count = await _repository.GetTotalTasksAsync();
+            return Ok(count);
+        }
+        [HttpGet]
+        [Route("completed-tasks")]
+        public async Task<IActionResult> GetCompletedTasks()
+        {
+            var count = await _repository.GetCompletedTasksAsync();
+            return Ok(count);
+        }
+
+        [HttpGet]
+        [Route("pending-tasks")]
+        public async Task<IActionResult> GetPendingTasks()
+        {
+            var count = await _repository.GetPendingTasksAsync();
+            return Ok(count);
+        }
+        [HttpGet]
+        [Route("project-status")]
         public async Task<IActionResult> GetProjectStatusSummary()
         {
             var summary = await _repository.GetProjectStatusSummaryAsync();
