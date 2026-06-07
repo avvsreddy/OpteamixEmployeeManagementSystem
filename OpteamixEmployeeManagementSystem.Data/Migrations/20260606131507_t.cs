@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace OpteamixEmployeeManagementSystem.Data.Migrations.ApplicationDb
+namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class t : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
