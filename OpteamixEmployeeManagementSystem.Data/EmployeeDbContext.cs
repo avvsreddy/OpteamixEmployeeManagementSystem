@@ -20,16 +20,28 @@ namespace OpteamixEmployeeManagementSystem.Data
 
         public DbSet<TaskItem> Tasks { get; set; }
 
-        protected override void OnModelCreating(
-            ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<TaskItem>()
                 .HasKey(t => t.TaskId);
+
             modelBuilder.Entity<Project>()
-    .Property(p => p.Budget)
-    .HasColumnType("decimal(18,2)");
+                .Property(p => p.Budget)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<TaskItem>()
+                .HasOne(t => t.Employee)
+                .WithMany()
+                .HasForeignKey(t => t.EmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TaskItem>()
+                .HasOne(t => t.Project)
+                .WithMany()
+                .HasForeignKey(t => t.ProjectId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

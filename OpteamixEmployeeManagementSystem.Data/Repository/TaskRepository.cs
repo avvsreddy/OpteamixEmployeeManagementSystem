@@ -28,9 +28,30 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                     t => t.TaskId == taskId);
         }
 
-        public async Task<TaskItem> AddTaskAsync(
+        public async Task<TaskItem?> AddTaskAsync(
             TaskItem task)
         {
+            if (task.EmployeeId.HasValue)
+            {
+                var employeeExists =
+                    await _context.Employees.AnyAsync(
+                        e => e.EmployeeId == task.EmployeeId);
+
+                if (!employeeExists)
+                {
+                    return null;
+                }
+            }
+
+            var projectExists =
+                await _context.Projects.AnyAsync(
+                    p => p.ProjectId == task.ProjectId);
+
+            if (!projectExists)
+            {
+                return null;
+            }
+
             await _context.Tasks.AddAsync(task);
 
             await _context.SaveChangesAsync();
@@ -120,10 +141,9 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<bool>
-            AssignTaskAsync(
-                int taskId,
-                int employeeId)
+        public async Task<bool> AssignTaskAsync(
+            int taskId,
+            int employeeId)
         {
             var task =
                 await _context.Tasks
@@ -131,6 +151,13 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                     t => t.TaskId == taskId);
 
             if (task == null)
+                return false;
+
+            var employeeExists =
+                await _context.Employees.AnyAsync(
+                    e => e.EmployeeId == employeeId);
+
+            if (!employeeExists)
                 return false;
 
             task.EmployeeId = employeeId;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OpteamixEmployeeManagementSystem.Domain.Entities;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
@@ -22,7 +22,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var tasks =
                 await _repository.GetTasksAsync();
 
-            return Ok(tasks);
+            return Ok(
+                tasks.Select(
+                    TaskConversions.FromEntity));
         }
 
         [HttpGet("{id}")]
@@ -35,35 +37,50 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             if (task == null)
                 return NotFound();
 
-            return Ok(task);
+            return Ok(
+                TaskConversions.FromEntity(task));
         }
 
         [HttpPost]
         public async Task<IActionResult>
-            AddTask(TaskItem task)
+            AddTask(CreateTaskDto dto)
         {
+            var task =
+                TaskConversions.ToEntity(dto);
+
             var result =
                 await _repository.AddTaskAsync(task);
 
-            return Ok(result);
+            if (result == null)
+            {
+                return BadRequest(
+                    "Invalid EmployeeId or ProjectId");
+            }
+
+            return Ok(
+                TaskConversions.FromEntity(result));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult>
             UpdateTask(
                 int id,
-                TaskItem task)
+                UpdateTaskDto dto)
         {
-            if (id != task.TaskId)
+            if (id != dto.TaskId)
             {
                 return BadRequest(
                     "Task ID mismatch");
             }
 
+            var task =
+                TaskConversions.ToEntity(dto);
+
             var result =
                 await _repository.UpdateTaskAsync(task);
 
-            return Ok(result);
+            return Ok(
+                TaskConversions.FromEntity(result));
         }
 
         [HttpDelete("{id}")]
@@ -73,7 +90,13 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var result =
                 await _repository.DeleteTaskAsync(id);
 
-            return Ok(result);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return Ok(
+                "Task deleted successfully");
         }
 
         [HttpGet("employee/{employeeId}")]
@@ -83,10 +106,12 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         {
             var tasks =
                 await _repository
-                .GetTasksByEmployeeIdAsync(
-                    employeeId);
+                    .GetTasksByEmployeeIdAsync(
+                        employeeId);
 
-            return Ok(tasks);
+            return Ok(
+                tasks.Select(
+                    TaskConversions.FromEntity));
         }
 
         [HttpGet("status/{status}")]
@@ -96,10 +121,12 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         {
             var tasks =
                 await _repository
-                .GetTasksByStatusAsync(
-                    status);
+                    .GetTasksByStatusAsync(
+                        status);
 
-            return Ok(tasks);
+            return Ok(
+                tasks.Select(
+                    TaskConversions.FromEntity));
         }
 
         [HttpGet("priority/{priority}")]
@@ -109,10 +136,12 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         {
             var tasks =
                 await _repository
-                .GetTasksByPriorityAsync(
-                    priority);
+                    .GetTasksByPriorityAsync(
+                        priority);
 
-            return Ok(tasks);
+            return Ok(
+                tasks.Select(
+                    TaskConversions.FromEntity));
         }
 
         [HttpPatch("{taskId}/assign/{employeeId}")]
@@ -123,12 +152,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         {
             var result =
                 await _repository
-                .AssignTaskAsync(
-                    taskId,
-                    employeeId);
+                    .AssignTaskAsync(
+                        taskId,
+                        employeeId);
 
             if (!result)
-                return NotFound();
+            {
+                return BadRequest(
+                    "Employee not found or Task not found");
+            }
 
             return Ok(
                 "Task assigned successfully");
@@ -142,13 +174,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         {
             var result =
                 await _repository
-                .UpdateTaskStatusAsync(
-                    taskId,
-                    status);
+                    .UpdateTaskStatusAsync(
+                        taskId,
+                        status);
 
             if (!result)
+            {
                 return BadRequest(
                     "Invalid task or status");
+            }
 
             return Ok(
                 "Task status updated");
@@ -162,13 +196,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         {
             var result =
                 await _repository
-                .UpdateTaskPriorityAsync(
-                    taskId,
-                    priority);
+                    .UpdateTaskPriorityAsync(
+                        taskId,
+                        priority);
 
             if (!result)
+            {
                 return BadRequest(
                     "Invalid task or priority");
+            }
 
             return Ok(
                 "Task priority updated");

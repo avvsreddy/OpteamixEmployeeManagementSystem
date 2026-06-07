@@ -8,7 +8,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.Repositories
 
         Task<TaskItem?> GetTaskByIdAsync(int taskId);
 
-        Task<TaskItem> AddTaskAsync(TaskItem task);
+        Task<TaskItem?> AddTaskAsync(TaskItem task);
 
         Task<TaskItem> UpdateTaskAsync(TaskItem task);
 

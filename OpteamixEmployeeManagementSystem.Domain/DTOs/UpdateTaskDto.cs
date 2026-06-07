@@ -1,11 +1,11 @@
 ﻿using OpteamixEmployeeManagementSystem.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace OpteamixEmployeeManagementSystem.Domain.Entities
+namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 {
-    public class TaskItem
+    public class UpdateTaskDto
     {
-        [Key]
+        [Required]
         public int TaskId { get; set; }
 
         [Required]
@@ -15,18 +15,11 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
         public string Description { get; set; } = string.Empty;
 
         public TaskItemStatus Status { get; set; }
-            = TaskItemStatus.New;
 
         public TaskPriority Priority { get; set; }
 
-        // FK -> Employee
         public int? EmployeeId { get; set; }
 
-        public Employee? Employee { get; set; }
-
-        // FK -> Project
         public int ProjectId { get; set; }
-
-        public Project? Project { get; set; }
     }
 }
