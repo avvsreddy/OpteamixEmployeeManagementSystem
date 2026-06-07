@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
+using OpteamixEmployeeManagementSystem.Domain.Enums;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,16 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         {
             _context = context;
         }
-        public Task<int> GetCompletedTasksAsync()
+        public async Task<int> GetCompletedTasksAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Tasks
+                .CountAsync(e => e.Status == TaskItemStatus.Completed);
         }
 
-        public Task<int> GetPendingTasksAsync()
+        public async Task<int> GetPendingTasksAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Tasks
+                .CountAsync(e => e.Status != TaskItemStatus.Completed);
         }
 
         public async Task<int> GetTotalEmployeesAsync()
@@ -35,18 +38,18 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             return await _context.Projects.CountAsync();
         }
 
-        public Task<int> GetTotalTasksAsync()
+        public async Task<int> GetTotalTasksAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Tasks.CountAsync();
         }
 
         public async Task<ProjectStatusSummaryDto> GetProjectStatusSummaryAsync()
         {
             return new ProjectStatusSummaryDto
             {
-                ActiveProjects = await _context.Projects.CountAsync(p => p.Status == "Active"),
-                InactiveProjects = await _context.Projects.CountAsync(p => p.Status == "Inactive"),
-                CompletedProjects = await _context.Projects.CountAsync(p => p.Status == "Completed")
+                ActiveProjects = await _context.Projects.CountAsync(e => e.Status == "Active"),
+                InactiveProjects = await _context.Projects.CountAsync(e => e.Status == "Inactive"),
+                CompletedProjects = await _context.Projects.CountAsync(e => e.Status == "Completed")
             };
         }
     }
