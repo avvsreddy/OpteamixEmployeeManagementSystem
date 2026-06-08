@@ -8,6 +8,7 @@ using OpteamixEmployeeManagementSystem.Data.Repository;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -18,20 +19,24 @@ namespace OpteamixEmployeeManagementSystem.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Controllers
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters
+                        .Add(new JsonStringEnumConverter());
+                });
 
             // Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Database - Original GitHub code kept
+            
+            // Employee Database Context
             builder.Services.AddDbContext<EmployeeDbContext>(options =>
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            
-
-            // Identity - Your Module 1
+            // Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -41,9 +46,7 @@ namespace OpteamixEmployeeManagementSystem.API
                 options.Password.RequireNonAlphanumeric = true;
             })
             .AddEntityFrameworkStores<EmployeeDbContext>()
-            .AddDefaultTokenProviders();
-
-            builder.Services.ConfigureApplicationCookie(options =>
+            .AddDefaultTokenProviders(); builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Events.OnRedirectToLogin = context =>
                 {
@@ -52,13 +55,20 @@ namespace OpteamixEmployeeManagementSystem.API
                 };
             });
 
-            // JWT Authentication - Your Module 1
+
+           
+            // JWT Authentication
             builder.Services
                 .AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
+
+                    options.DefaultChallengeScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
+
+                    options.DefaultScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(options =>
                 {
@@ -69,25 +79,34 @@ namespace OpteamixEmployeeManagementSystem.API
                             ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
-                            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+                            ValidIssuer =
+                                builder.Configuration["Jwt:Issuer"],
+
+                            ValidAudience =
+                                builder.Configuration["Jwt:Audience"],
+
                             IssuerSigningKey =
                                 new SymmetricSecurityKey(
                                     Encoding.UTF8.GetBytes(
-                                        builder.Configuration["Jwt:Key"]))
+                                        builder.Configuration["Jwt:Key"]!))
                         };
                 });
 
             // Authorization
             builder.Services.AddAuthorization();
 
-            // Services - Your Module 1
+            // Services
             builder.Services.AddScoped<TokenServices>();
 
-            // Repositories - Original GitHub code kept
+            // Repositories
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
+            builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -99,6 +118,7 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllers();
