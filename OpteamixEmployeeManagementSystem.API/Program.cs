@@ -9,6 +9,8 @@ using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System.Text;
 using System.Text.Json.Serialization;
+using AutoMapper;
+using OpteamixEmployeeManagementSystem.API.Profiles;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -107,6 +109,8 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
+            builder.Services.AddAutoMapper(
+    typeof(MappingProfile));
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
