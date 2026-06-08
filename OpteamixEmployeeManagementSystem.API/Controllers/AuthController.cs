@@ -104,6 +104,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             if (!await _roleManager.RoleExistsAsync(dto.Role))
                 await _roleManager.CreateAsync(new IdentityRole(dto.Role));
 
+            var existingRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, existingRoles);
+
             var result = await _userManager.AddToRoleAsync(user, dto.Role);
 
             if (!result.Succeeded)

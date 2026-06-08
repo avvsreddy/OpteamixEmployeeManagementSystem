@@ -13,7 +13,7 @@ namespace OpteamixEmployeeManagementSystem.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task  Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +102,34 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseAuthorization();
 
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                string[] roles = { "Admin", "Manager", "Employee" };
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                }
+
+                var adminEmail = "admin@opteamix.com";
+                var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                if (adminUser == null)  // only runs if admin doesn't exist
+                {
+                    var admin = new ApplicationUser
+                    {
+                        FullName = "Super Admin",
+                        Email = adminEmail,
+                        UserName = adminEmail,
+                        CreatedDate = DateTime.UtcNow
+                    };
+                    await userManager.CreateAsync(admin, "Admin@1234");
+                    await userManager.AddToRoleAsync(admin, "Admin");
+                }
+            }
 
             app.Run();
         }
