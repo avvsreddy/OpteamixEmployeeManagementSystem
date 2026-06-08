@@ -14,7 +14,7 @@ namespace OpteamixEmployeeManagementSystem.API
 {
     public class Program
     {
-        public static async Task  Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +30,7 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            
+
             // Employee Database Context
             builder.Services.AddDbContext<EmployeeDbContext>(options =>
                 options.UseSqlServer(
@@ -46,7 +46,9 @@ namespace OpteamixEmployeeManagementSystem.API
                 options.Password.RequireNonAlphanumeric = true;
             })
             .AddEntityFrameworkStores<EmployeeDbContext>()
-            .AddDefaultTokenProviders(); builder.Services.ConfigureApplicationCookie(options =>
+            .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Events.OnRedirectToLogin = context =>
                 {
@@ -55,8 +57,6 @@ namespace OpteamixEmployeeManagementSystem.API
                 };
             });
 
-
-           
             // JWT Authentication
             builder.Services
                 .AddAuthentication(options =>
@@ -98,7 +98,12 @@ namespace OpteamixEmployeeManagementSystem.API
 
             // Services
             builder.Services.AddScoped<TokenServices>();
-
+            ////Memory Cache
+            //builder.Services.AddMemoryCache();
+            ////Response Cache
+            //builder.Services.AddResponseCaching();
+            // Output cache
+            builder.Services.AddOutputCache();
             // Repositories
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
@@ -107,6 +112,7 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -115,6 +121,10 @@ namespace OpteamixEmployeeManagementSystem.API
                 app.UseSwaggerUI();
             }
 
+            // app.UseResponseCaching();
+
+            app.UseOutputCache();
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -122,34 +132,6 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseAuthorization();
 
             app.MapControllers();
-
-            using (var scope = app.Services.CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-                string[] roles = { "Admin", "Manager", "Employee" };
-                foreach (var role in roles)
-                {
-                    if (!await roleManager.RoleExistsAsync(role))
-                        await roleManager.CreateAsync(new IdentityRole(role));
-                }
-
-                var adminEmail = "admin@opteamix.com";
-                var adminUser = await userManager.FindByEmailAsync(adminEmail);
-                if (adminUser == null)  // only runs if admin doesn't exist
-                {
-                    var admin = new ApplicationUser
-                    {
-                        FullName = "Super Admin",
-                        Email = adminEmail,
-                        UserName = adminEmail,
-                        CreatedDate = DateTime.UtcNow
-                    };
-                    await userManager.CreateAsync(admin, "Admin@1234");
-                    await userManager.AddToRoleAsync(admin, "Admin");
-                }
-            }
 
             app.Run();
         }
