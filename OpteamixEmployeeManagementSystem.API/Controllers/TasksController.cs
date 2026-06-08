@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
@@ -17,6 +18,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTasks()
         {
             var tasks =
@@ -27,7 +29,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                     TaskConversions.FromEntity));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult>
             GetTaskById(int id)
         {
@@ -42,6 +46,8 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult>
             AddTask(CreateTaskDto dto)
         {
@@ -61,7 +67,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 TaskConversions.FromEntity(result));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult>
             UpdateTask(
                 int id,
@@ -83,7 +91,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 TaskConversions.FromEntity(result));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult>
             DeleteTask(int id)
         {
@@ -99,7 +109,8 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 "Task deleted successfully");
         }
 
-        [HttpGet("employee/{employeeId}")]
+        [HttpGet("employee/{employeeId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult>
             GetTasksByEmployeeId(
                 int employeeId)
@@ -115,6 +126,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         }
 
         [HttpGet("status/{status}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult>
             GetTasksByStatus(
                 string status)
@@ -130,6 +142,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
         }
 
         [HttpGet("priority/{priority}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult>
             GetTasksByPriority(
                 string priority)
@@ -144,7 +157,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                     TaskConversions.FromEntity));
         }
 
-        [HttpPatch("{taskId}/assign/{employeeId}")]
+        [HttpPatch("{taskId:int}/assign/{employeeId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult>
             AssignTask(
                 int taskId,
@@ -166,7 +181,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 "Task assigned successfully");
         }
 
-        [HttpPatch("{taskId}/status/{status}")]
+        [HttpPatch("{taskId:int}/status/{status}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult>
             UpdateTaskStatus(
                 int taskId,
@@ -188,7 +205,9 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 "Task status updated");
         }
 
-        [HttpPatch("{taskId}/priority/{priority}")]
+        [HttpPatch("{taskId:int}/priority/{priority}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult>
             UpdateTaskPriority(
                 int taskId,
