@@ -52,5 +52,18 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
                 ManagerId = dto.ManagerId
             };
         }
+
+        // ProjectSummaryDto -> Entity
+        public static ProjectSummaryDto ToSummaryDto(IEnumerable<Project> projects)
+        {
+            return new ProjectSummaryDto
+            {
+                TotalProjects = projects.Count(),
+                ActiveProjects = projects.Count(p => p.Status == ProjectStatus.Active),
+                InactiveProjects = projects.Count(p => p.Status == ProjectStatus.Inactive),
+                CompletedProjects = projects.Count(p => p.Status == ProjectStatus.Completed),
+                TotalBudget = projects.Sum(p => p.Budget)
+            };
+        }
     }
 }

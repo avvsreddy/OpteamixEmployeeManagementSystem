@@ -12,7 +12,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Budget { get; set; }
-        public string Status { get; set; } = "Active";
+        public ProjectStatus Status { get; set; }
         public int? ManagerId { get; set; }
         public Employee? Manager { get; set; }
     }

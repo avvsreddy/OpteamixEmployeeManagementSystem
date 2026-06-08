@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidator;
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
@@ -8,14 +9,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 {
     [ApiController]
     [Route("api/projects")]
-    //[Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IProjectValidator _projectValidator;
 
-        public ProjectController(IProjectRepository projectRepository)
+        public ProjectController(IProjectRepository projectRepository, IProjectValidator projectValidator)
         {
             _projectRepository = projectRepository;
+            _projectValidator = projectValidator;
         }
 
         // GET api/projects
@@ -40,13 +42,11 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 
         // POST api/projects
         [HttpPost]
-        //[Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<ProjectDto>> Create([FromBody] CreateProjectDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var project = ProjectConversions.ToEntity(dto);
+            _projectValidator.Validate(dto);
+
             var created = await _projectRepository.CreateProjectAsync(project);
 
             return CreatedAtAction(nameof(GetById),
@@ -56,13 +56,11 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 
         // PUT api/projects/{id}
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<ProjectDto>> Update(int id, [FromBody] UpdateProjectDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var project = ProjectConversions.ToEntity(dto);
+            _projectValidator.Validate(dto);
+
             var updated = await _projectRepository.UpdateProjectAsync(id, project);
 
             if (updated == null)
@@ -73,7 +71,6 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 
         // DELETE api/projects/{id}
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _projectRepository.DeleteProjectAsync(id);
@@ -83,20 +80,12 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 
             return NoContent();
         }
+
         // GET api/projects/summary
         [HttpGet("summary")]
-        public async Task<IActionResult> GetProjectSummary()
+        public async Task<ActionResult<ProjectSummaryDto>> GetProjectSummary()
         {
-            var projects = await _projectRepository.GetAllProjectsAsync();
-
-            var summary = new
-            {
-                TotalProjects = projects.Count(),
-                ActiveProjects = projects.Count(p => p.Status == "Active"),
-                InactiveProjects = projects.Count(p => p.Status == "Inactive"),
-                CompletedProjects = projects.Count(p => p.Status == "Completed"),
-                TotalBudget = projects.Sum(p => p.Budget)
-            };
+            var summary = await _projectRepository.GetProjectSummaryAsync();
 
             return Ok(summary);
         }

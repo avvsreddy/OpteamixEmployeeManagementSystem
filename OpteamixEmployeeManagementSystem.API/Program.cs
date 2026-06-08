@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidator;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.API
@@ -21,10 +22,10 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddDbContext<EmployeeDbContext>( options => options.UseSqlServer( builder.Configuration.GetConnectionString( "DefaultConnection")));
 
             builder.Services.AddScoped< IEmployeeRepository, EmployeeRepository>();
-            // AutoMapper
 
             // Project Repository
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            builder.Services.AddScoped<IProjectValidator, ProjectValidator>();
 
             var app = builder.Build();
 

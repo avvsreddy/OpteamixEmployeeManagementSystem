@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpteamixEmployeeManagementSystem.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Budget { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public ProjectStatus Status { get; set; }
         public int? ManagerId { get; set; }
     }
 }

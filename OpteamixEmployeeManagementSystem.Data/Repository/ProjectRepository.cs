@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System;
@@ -66,6 +67,21 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        // NEW CODE
+        public async Task<ProjectSummaryDto> GetProjectSummaryAsync()
+        {
+            var projects = await _context.Projects.ToListAsync();
+
+            return new ProjectSummaryDto
+            {
+                TotalProjects = projects.Count(),
+                ActiveProjects = projects.Count(p => p.Status == ProjectStatus.Active),
+                InactiveProjects = projects.Count(p => p.Status == ProjectStatus.Inactive),
+                CompletedProjects = projects.Count(p => p.Status == ProjectStatus.Completed),
+                TotalBudget = projects.Sum(p => p.Budget)
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpteamixEmployeeManagementSystem.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -25,7 +26,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
         public decimal Budget { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
-        public string Status { get; set; } = string.Empty;
+        public ProjectStatus Status { get; set; }
         public int? ManagerId { get; set; }
     }
 }
