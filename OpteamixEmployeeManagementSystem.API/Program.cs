@@ -9,8 +9,10 @@ using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
+using OpteamixEmployeeManagementSystem.Domain.Settings;
 using System.Text;
 using System.Text.Json.Serialization;
+using OpteamixEmployeeManagementSystem.Domain.Settings;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -100,6 +102,15 @@ namespace OpteamixEmployeeManagementSystem.API
             // Services
             builder.Services.AddScoped<TokenServices>();
 
+            builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddScoped<EmailService>();
+
+            ////Memory Cache
+            //builder.Services.AddMemoryCache();
+            ////Response Cache
+            //builder.Services.AddResponseCaching();
+            // Output cache
             // Output Cache
             builder.Services.AddOutputCache();
 
