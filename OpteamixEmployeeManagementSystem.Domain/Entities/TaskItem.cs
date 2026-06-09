@@ -18,12 +18,10 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
 
         public TaskPriority Priority { get; set; }
 
-        // FK -> Employee
         public int? EmployeeId { get; set; }
 
         public Employee? Employee { get; set; }
 
-        // FK -> Project
         public int ProjectId { get; set; }
 
         public Project? Project { get; set; }

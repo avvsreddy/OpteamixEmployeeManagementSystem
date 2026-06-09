@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpteamixEmployeeManagementSystem.API.Profiles;
 using OpteamixEmployeeManagementSystem.API.Services;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
@@ -9,8 +11,6 @@ using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System.Text;
 using System.Text.Json.Serialization;
-using AutoMapper;
-using OpteamixEmployeeManagementSystem.API.Profiles;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -32,7 +32,6 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            
             // Employee Database Context
             builder.Services.AddDbContext<EmployeeDbContext>(options =>
                 options.UseSqlServer(
@@ -101,16 +100,19 @@ namespace OpteamixEmployeeManagementSystem.API
             // Services
             builder.Services.AddScoped<TokenServices>();
 
+            // Output Cache
+            builder.Services.AddOutputCache();
+
             // Repositories
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
+            // AutoMapper
             builder.Services.AddAutoMapper(
-    typeof(MappingProfile));
+                typeof(MappingProfile));
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -118,6 +120,8 @@ namespace OpteamixEmployeeManagementSystem.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseOutputCache();
 
             app.UseHttpsRedirection();
 
