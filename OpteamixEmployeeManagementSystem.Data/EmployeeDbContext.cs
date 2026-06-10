@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 
 namespace OpteamixEmployeeManagementSystem.Data
@@ -15,7 +18,11 @@ namespace OpteamixEmployeeManagementSystem.Data
 
         public DbSet<Employee> Employees { get; set; }
 
+        public DbSet<Department> Department { get; set; }
+
         public DbSet<Project> Projects { get; set; }
+
+        
 
         public DbSet<TaskItem> Tasks { get; set; }
 
