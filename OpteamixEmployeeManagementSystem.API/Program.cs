@@ -7,11 +7,14 @@ using OpteamixEmployeeManagementSystem.API.Profiles;
 using OpteamixEmployeeManagementSystem.API.Services;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using OpteamixEmployeeManagementSystem.Domain.Settings;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.OData;
+using OpteamixEmployeeManagementSystem.API.Middleware;
 using OpteamixEmployeeManagementSystem.Domain.Settings;
 
 namespace OpteamixEmployeeManagementSystem.API
@@ -24,6 +27,13 @@ namespace OpteamixEmployeeManagementSystem.API
 
             // Controllers
             builder.Services.AddControllers()
+                 .AddOData(options => options
+                       .Select()
+                       .Filter()
+                       .OrderBy()
+                       .Expand()
+                       .Count()
+                       .SetMaxTop(100))
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters
@@ -117,6 +127,9 @@ namespace OpteamixEmployeeManagementSystem.API
             // Repositories
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            // Validators
+            builder.Services.AddScoped<IProjectValidator, ProjectValidator>();
+
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
@@ -135,6 +148,9 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseOutputCache();
 
             app.UseHttpsRedirection();
+
+            //Middleware
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseAuthentication();
 

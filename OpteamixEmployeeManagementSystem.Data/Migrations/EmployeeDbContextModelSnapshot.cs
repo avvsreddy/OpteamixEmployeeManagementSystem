@@ -316,6 +316,9 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("ProjectId");
 
                     b.HasIndex("ManagerId");
