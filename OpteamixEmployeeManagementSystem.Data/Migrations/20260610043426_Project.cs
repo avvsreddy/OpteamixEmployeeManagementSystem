@@ -6,11 +6,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:OpteamixEmployeeManagementSystem.Data/Migrations/20260610090904_initial01.cs
-    public partial class initial01 : Migration
-========
+
     public partial class Project : Migration
->>>>>>>> origin/main:OpteamixEmployeeManagementSystem.Data/Migrations/20260610043426_Project.cs
+
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,7 +67,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                 {
                     EmployeeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-<<<<<<<< HEAD:OpteamixEmployeeManagementSystem.Data/Migrations/20260610090904_initial01.cs
+
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -77,14 +75,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                     Designation = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     JoiningDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-========
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Department = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JoiningDate = table.Column<DateTime>(type: "datetime2", nullable: false)
->>>>>>>> origin/main:OpteamixEmployeeManagementSystem.Data/Migrations/20260610043426_Project.cs
+
                 },
                 constraints: table =>
                 {
@@ -209,12 +200,10 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Budget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-<<<<<<<< HEAD:OpteamixEmployeeManagementSystem.Data/Migrations/20260610090904_initial01.cs
-                    ManagerId = table.Column<int>(type: "int", nullable: true)
-========
+
                     ManagerId = table.Column<int>(type: "int", nullable: true),
                     isDeleted = table.Column<bool>(type: "bit", nullable: false)
->>>>>>>> origin/main:OpteamixEmployeeManagementSystem.Data/Migrations/20260610043426_Project.cs
+
                 },
                 constraints: table =>
                 {

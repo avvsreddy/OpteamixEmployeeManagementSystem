@@ -12,13 +12,9 @@ using OpteamixEmployeeManagementSystem.Data;
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-<<<<<<<< HEAD:OpteamixEmployeeManagementSystem.Data/Migrations/20260610090904_initial01.Designer.cs
-    [Migration("20260610090904_initial01")]
-    partial class initial01
-========
+
     [Migration("20260610043426_Project")]
     partial class Project
->>>>>>>> origin/main:OpteamixEmployeeManagementSystem.Data/Migrations/20260610043426_Project.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
