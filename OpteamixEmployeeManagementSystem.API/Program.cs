@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OpteamixEmployeeManagementSystem.API.Profiles;
+using OpteamixEmployeeManagementSystem.API.Middleware;
 using OpteamixEmployeeManagementSystem.API.Services;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
@@ -16,6 +16,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.OData;
 using OpteamixEmployeeManagementSystem.API.Middleware;
 using OpteamixEmployeeManagementSystem.Domain.Settings;
+using OpteamixEmployeeManagementSystem.API.Profiles;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -47,28 +48,33 @@ namespace OpteamixEmployeeManagementSystem.API
             // Employee Database Context
             builder.Services.AddDbContext<EmployeeDbContext>(options =>
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
+                    builder.Configuration.GetConnectionString(
+                        "DefaultConnection")));
 
             // Identity
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireDigit = true;
-                options.Password.RequireNonAlphanumeric = true;
-            })
-            .AddEntityFrameworkStores<EmployeeDbContext>()
-            .AddDefaultTokenProviders();
-
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.Events.OnRedirectToLogin = context =>
+            builder.Services.AddIdentity<
+                ApplicationUser,
+                IdentityRole>(options =>
                 {
-                    context.Response.StatusCode = 401;
-                    return Task.CompletedTask;
-                };
-            });
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                })
+                .AddEntityFrameworkStores<EmployeeDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(
+                options =>
+                {
+                    options.Events.OnRedirectToLogin =
+                        context =>
+                        {
+                            context.Response.StatusCode = 401;
+                            return Task.CompletedTask;
+                        };
+                });
 
             // JWT Authentication
             builder.Services
@@ -125,27 +131,40 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddOutputCache();
 
             // Repositories
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-            // Validators
-            builder.Services.AddScoped<IProjectValidator, ProjectValidator>();
+            builder.Services.AddScoped<
+                IDepartmentRepository,
+                DepartmentRepository>();
 
-            builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-            builder.Services.AddScoped<IReportRepository, ReportRepository>();
+            builder.Services.AddScoped<
+                IEmployeeRepository,
+                EmployeeRepository>();
 
+            builder.Services.AddScoped<
+                IProjectRepository,
+                ProjectRepository>();
+
+            builder.Services.AddScoped<
+                ITaskRepository,
+                TaskRepository>();
+
+            builder.Services.AddScoped<
+                IReportRepository,
+                ReportRepository>();
             // AutoMapper
             builder.Services.AddAutoMapper(
                 typeof(MappingProfile));
 
             var app = builder.Build();
 
+            // Swagger
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseOutputCache();
+            // Middleware
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 

@@ -10,8 +10,10 @@ namespace OpteamixEmployeeManagementSystem.Domain.Repositories
 
         Task<Employee> AddEmployeeAsync(Employee employee);
 
-        Task<Employee> UpdateEmployeeAsync(Employee employee);
+        Task<Employee?> UpdateEmployeeAsync(Employee employee);
 
         Task<bool> DeleteEmployeeAsync(int employeeId);
+
+        Task<List<Employee>> SearchEmployeesAsync(string keyword);
     }
 }

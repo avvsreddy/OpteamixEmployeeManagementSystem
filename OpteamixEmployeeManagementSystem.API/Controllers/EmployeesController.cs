@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
 {
@@ -22,58 +23,99 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var employees =
                 await _repository.GetEmployeesAsync();
 
-            return Ok(employees);
+            return Ok(
+                employees.Select(
+                    EmployeeConversions.FromEntity));
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetEmployeeById(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEmployeeById(
+            int id)
         {
             var employee =
                 await _repository.GetEmployeeByIdAsync(id);
 
             if (employee == null)
+            {
                 return NotFound();
+            }
 
-            return Ok(employee);
+            return Ok(EmployeeConversions.FromEntity(employee));
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchEmployees(
+            string keyword)
+        {
+            var employees =
+                await _repository.SearchEmployeesAsync(keyword);
+
+            return Ok(
+    employees.Select(
+        EmployeeConversions.FromEntity));
         }
 
         [HttpPost]
         public async Task<IActionResult> AddEmployee(
-            Employee employee)
+    [FromBody] CreateEmployeeDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var employee =
+                EmployeeConversions.ToEntity(dto);
+
             var result =
                 await _repository.AddEmployeeAsync(employee);
 
-            return Ok(result);
+            return CreatedAtAction(
+                nameof(GetEmployeeById),
+                new { id = result.EmployeeId },
+                EmployeeConversions.FromEntity(result));
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(
-            int id,
-            Employee employee)
+    int id,
+    [FromBody] UpdateEmployeeDto dto)
         {
-            if (id != employee.EmployeeId)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (id != dto.EmployeeId)
             {
                 return BadRequest(
                     "Employee ID mismatch");
             }
 
+            var employee =
+                EmployeeConversions.ToEntity(dto);
+
             var result =
                 await _repository.UpdateEmployeeAsync(employee);
 
-            return Ok(result);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(
+                EmployeeConversions.FromEntity(result));
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmployee(
+            int id)
         {
             var result =
                 await _repository.DeleteEmployeeAsync(id);
 
-            return Ok(result);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }
