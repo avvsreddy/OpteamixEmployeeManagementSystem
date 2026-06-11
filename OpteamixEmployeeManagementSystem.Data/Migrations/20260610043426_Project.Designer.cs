@@ -12,8 +12,13 @@ using OpteamixEmployeeManagementSystem.Data;
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20260608112839_AddRefreshToken")]
-    partial class AddRefreshToken
+<<<<<<<< HEAD:OpteamixEmployeeManagementSystem.Data/Migrations/20260610090904_initial01.Designer.cs
+    [Migration("20260610090904_initial01")]
+    partial class initial01
+========
+    [Migration("20260610043426_Project")]
+    partial class Project
+>>>>>>>> origin/main:OpteamixEmployeeManagementSystem.Data/Migrations/20260610043426_Project.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -261,22 +266,28 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Designation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("JoiningDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -318,6 +329,9 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("ProjectId");
 

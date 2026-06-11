@@ -12,13 +12,8 @@ using OpteamixEmployeeManagementSystem.Data;
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-<<<<<<<< HEAD:OpteamixEmployeeManagementSystem.Data/Migrations/20260610090904_initial01.Designer.cs
-    [Migration("20260610090904_initial01")]
-    partial class initial01
-========
-    [Migration("20260610043426_Project")]
-    partial class Project
->>>>>>>> origin/main:OpteamixEmployeeManagementSystem.Data/Migrations/20260610043426_Project.Designer.cs
+    [Migration("20260610050347_AddIsDeletedToProject")]
+    partial class AddIsDeletedToProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,28 +261,22 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Designation")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("JoiningDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

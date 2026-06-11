@@ -7,6 +7,9 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 {
     public class UpdateProjectDto
     {
+        [Required(ErrorMessage ="Project ID is required")]
+        public int ProjectId { get; set; }  
+
         [Required(ErrorMessage = "Project name is required")]
         [MaxLength(100)]
         public string ProjectName { get; set; } = string.Empty;

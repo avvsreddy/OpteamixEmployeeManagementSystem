@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System;
@@ -19,6 +20,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
         {
             return await _context.Projects
+                .Where(p => !p.isDeleted)
                 .Include(p => p.Manager)
                 .ToListAsync();
         }
@@ -27,7 +29,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         {
             return await _context.Projects
                 .Include(p => p.Manager)
-                .FirstOrDefaultAsync(p => p.ProjectId == id);
+                .FirstOrDefaultAsync(p => p.ProjectId == id && !p.isDeleted);
         }
 
         public async Task<Project> CreateProjectAsync(Project project)
@@ -39,10 +41,12 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
 
         public async Task<Project?> UpdateProjectAsync(int id, Project updatedProject)
         {
-            var existing = await _context.Projects.FindAsync(id);
+            var existing = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id && !p.isDeleted);
 
             if (existing == null)
+            {
                 return null;
+            }
 
             existing.ProjectName = updatedProject.ProjectName;
             existing.ClientName = updatedProject.ClientName;
@@ -58,14 +62,39 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
 
         public async Task<bool> DeleteProjectAsync(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id && !p.isDeleted);
 
             if (project == null)
                 return false;
 
-            _context.Projects.Remove(project);
+            project.isDeleted = true;
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<ViewProjectSummaryDto> GetViewProjectSummaryAsync()
+        {
+            var projects = await _context.Projects.Where(p => !p.isDeleted).ToListAsync();
+
+            return new ViewProjectSummaryDto
+            {
+                TotalProjects = projects.Count(),
+
+                ActiveProjects = projects.Count(p => p.Status == "Active"),
+
+                InactiveProjects = projects.Count(p => p.Status == "InActive"),
+
+                CompletedProjects = projects.Count(p => p.Status == "Completed"),
+
+                TotalBudget = projects.Sum(p => p.Budget)
+            };
+        }
+
+        public IQueryable<Project> GetAllProjectsQueryable()
+        {
+            return _context.Projects
+            .Where(p => !p.isDeleted)
+            .AsQueryable();
         }
     }
 }

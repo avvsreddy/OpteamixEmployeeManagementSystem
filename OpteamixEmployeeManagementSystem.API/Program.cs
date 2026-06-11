@@ -7,11 +7,14 @@ using OpteamixEmployeeManagementSystem.API.Middleware;
 using OpteamixEmployeeManagementSystem.API.Services;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using OpteamixEmployeeManagementSystem.Domain.Settings;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.OData;
+using OpteamixEmployeeManagementSystem.API.Middleware;
 using OpteamixEmployeeManagementSystem.Domain.Settings;
 using OpteamixEmployeeManagementSystem.API.Profiles;
 
@@ -25,6 +28,13 @@ namespace OpteamixEmployeeManagementSystem.API
 
             // Controllers
             builder.Services.AddControllers()
+                 .AddOData(options => options
+                       .Select()
+                       .Filter()
+                       .OrderBy()
+                       .Expand()
+                       .Count()
+                       .SetMaxTop(100))
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters
@@ -157,6 +167,9 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
+
+            //Middleware
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseAuthentication();
 
