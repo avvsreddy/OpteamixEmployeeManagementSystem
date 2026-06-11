@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
 {

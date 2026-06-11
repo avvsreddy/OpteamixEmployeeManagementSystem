@@ -1,22 +1,19 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpteamixEmployeeManagementSystem.API.Middleware;
 using OpteamixEmployeeManagementSystem.API.Services;
-using OpteamixEmployeeManagementSystem.Data;
-using OpteamixEmployeeManagementSystem.Data.Repository;
-using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
-using OpteamixEmployeeManagementSystem.Domain.Entities;
-using OpteamixEmployeeManagementSystem.Domain.Repositories;
-using OpteamixEmployeeManagementSystem.Domain.Settings;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.OData;
-using OpteamixEmployeeManagementSystem.API.Middleware;
-using OpteamixEmployeeManagementSystem.Domain.Settings;
 using OpteamixEmployeeManagementSystem.API.Profiles;
+
+
+
+
+using OpteamixEmployeeManagementSystem.Data.Repository;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
