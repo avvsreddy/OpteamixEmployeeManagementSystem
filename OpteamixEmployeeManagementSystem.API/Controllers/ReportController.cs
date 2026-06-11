@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
@@ -10,13 +10,13 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
     [Route("api/[controller]")]
     public class ReportController : ControllerBase
     {
-
         private readonly IReportRepository _repository;
 
         public ReportController(IReportRepository repository)
         {
             _repository = repository;
         }
+
         //[Authorize]
         [HttpGet]
         [Route("total-employees")]
@@ -26,6 +26,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var count = await _repository.GetTotalEmployeesAsync();
             return Ok(count);
         }
+
         //[Authorize]
         [HttpGet]
         [Route("total-projects")]
@@ -35,6 +36,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var count = await _repository.GetTotalProjectsAsync();
             return Ok(count);
         }
+
         //[Authorize]
         [HttpGet]
         [Route("total-tasks")]
@@ -44,6 +46,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var count = await _repository.GetTotalTasksAsync();
             return Ok(count);
         }
+
         //[Authorize]
         [HttpGet]
         [Route("completed-tasks")]
@@ -53,6 +56,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var count = await _repository.GetCompletedTasksAsync();
             return Ok(count);
         }
+
         //[Authorize]
         [HttpGet]
         [Route("pending-tasks")]
@@ -62,6 +66,7 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             var count = await _repository.GetPendingTasksAsync();
             return Ok(count);
         }
+
         //[Authorize]
         [HttpGet]
         [Route("project-status")]

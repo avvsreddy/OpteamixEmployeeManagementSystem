@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpteamixEmployeeManagementSystem.API.Profiles;
 using OpteamixEmployeeManagementSystem.API.Services;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
@@ -31,7 +33,6 @@ namespace OpteamixEmployeeManagementSystem.API
             // Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
 
             // Employee Database Context
             builder.Services.AddDbContext<EmployeeDbContext>(options =>
@@ -110,15 +111,18 @@ namespace OpteamixEmployeeManagementSystem.API
             ////Response Cache
             //builder.Services.AddResponseCaching();
             // Output cache
+            // Output Cache
             builder.Services.AddOutputCache();
+
             // Repositories
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
+            // AutoMapper
+            builder.Services.AddAutoMapper(
+                typeof(MappingProfile));
 
             var app = builder.Build();
 
@@ -127,8 +131,6 @@ namespace OpteamixEmployeeManagementSystem.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            // app.UseResponseCaching();
 
             app.UseOutputCache();
 

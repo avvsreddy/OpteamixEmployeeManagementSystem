@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
+using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
@@ -9,27 +12,31 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
     public class TasksController : ControllerBase
     {
         private readonly ITaskRepository _repository;
+        private readonly IMapper _mapper;
 
         public TasksController(
-            ITaskRepository repository)
+            ITaskRepository repository,
+            IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTasks()
         {
             var tasks =
                 await _repository.GetTasksAsync();
 
             return Ok(
-                tasks.Select(
-                    TaskConversions.FromEntity));
+                _mapper.Map<List<TaskDto>>(tasks));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult>
-            GetTaskById(int id)
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetTaskById(int id)
         {
             var task =
                 await _repository.GetTaskByIdAsync(id);
@@ -38,15 +45,16 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 return NotFound();
 
             return Ok(
-                TaskConversions.FromEntity(task));
+                _mapper.Map<TaskDto>(task));
         }
 
         [HttpPost]
-        public async Task<IActionResult>
-            AddTask(CreateTaskDto dto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddTask(CreateTaskDto dto)
         {
             var task =
-                TaskConversions.ToEntity(dto);
+                _mapper.Map<TaskItem>(dto);
 
             var result =
                 await _repository.AddTaskAsync(task);
@@ -58,14 +66,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             }
 
             return Ok(
-                TaskConversions.FromEntity(result));
+                _mapper.Map<TaskDto>(result));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult>
-            UpdateTask(
-                int id,
-                UpdateTaskDto dto)
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateTask(
+            int id,
+            UpdateTaskDto dto)
         {
             if (id != dto.TaskId)
             {
@@ -74,18 +83,19 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             }
 
             var task =
-                TaskConversions.ToEntity(dto);
+                _mapper.Map<TaskItem>(dto);
 
             var result =
                 await _repository.UpdateTaskAsync(task);
 
             return Ok(
-                TaskConversions.FromEntity(result));
+                _mapper.Map<TaskDto>(result));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult>
-            DeleteTask(int id)
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteTask(int id)
         {
             var result =
                 await _repository.DeleteTaskAsync(id);
@@ -99,10 +109,10 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 "Task deleted successfully");
         }
 
-        [HttpGet("employee/{employeeId}")]
-        public async Task<IActionResult>
-            GetTasksByEmployeeId(
-                int employeeId)
+        [HttpGet("employee/{employeeId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTasksByEmployeeId(
+            int employeeId)
         {
             var tasks =
                 await _repository
@@ -110,14 +120,13 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                         employeeId);
 
             return Ok(
-                tasks.Select(
-                    TaskConversions.FromEntity));
+                _mapper.Map<List<TaskDto>>(tasks));
         }
 
         [HttpGet("status/{status}")]
-        public async Task<IActionResult>
-            GetTasksByStatus(
-                string status)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTasksByStatus(
+            string status)
         {
             var tasks =
                 await _repository
@@ -125,14 +134,13 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                         status);
 
             return Ok(
-                tasks.Select(
-                    TaskConversions.FromEntity));
+                _mapper.Map<List<TaskDto>>(tasks));
         }
 
         [HttpGet("priority/{priority}")]
-        public async Task<IActionResult>
-            GetTasksByPriority(
-                string priority)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTasksByPriority(
+            string priority)
         {
             var tasks =
                 await _repository
@@ -140,15 +148,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                         priority);
 
             return Ok(
-                tasks.Select(
-                    TaskConversions.FromEntity));
+                _mapper.Map<List<TaskDto>>(tasks));
         }
 
-        [HttpPatch("{taskId}/assign/{employeeId}")]
-        public async Task<IActionResult>
-            AssignTask(
-                int taskId,
-                int employeeId)
+        [HttpPatch("{taskId:int}/assign/{employeeId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AssignTask(
+            int taskId,
+            int employeeId)
         {
             var result =
                 await _repository
@@ -166,11 +174,12 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 "Task assigned successfully");
         }
 
-        [HttpPatch("{taskId}/status/{status}")]
-        public async Task<IActionResult>
-            UpdateTaskStatus(
-                int taskId,
-                string status)
+        [HttpPatch("{taskId:int}/status/{status}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateTaskStatus(
+            int taskId,
+            string status)
         {
             var result =
                 await _repository
@@ -188,11 +197,12 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 "Task status updated");
         }
 
-        [HttpPatch("{taskId}/priority/{priority}")]
-        public async Task<IActionResult>
-            UpdateTaskPriority(
-                int taskId,
-                string priority)
+        [HttpPatch("{taskId:int}/priority/{priority}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateTaskPriority(
+            int taskId,
+            string priority)
         {
             var result =
                 await _repository
