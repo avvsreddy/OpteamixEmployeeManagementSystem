@@ -15,5 +15,6 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
         public string Status { get; set; } = "Active";
         public int? ManagerId { get; set; }
         public Employee? Manager { get; set; }
+        public bool isDeleted { get; set; } = false;
     }
 }

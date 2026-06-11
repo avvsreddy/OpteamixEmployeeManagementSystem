@@ -5,10 +5,13 @@ using Microsoft.IdentityModel.Tokens;
 using OpteamixEmployeeManagementSystem.API.Services;
 using OpteamixEmployeeManagementSystem.Data;
 using OpteamixEmployeeManagementSystem.Data.Repository;
+using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.OData;
+using OpteamixEmployeeManagementSystem.API.Middleware;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -20,6 +23,13 @@ namespace OpteamixEmployeeManagementSystem.API
 
             // Controllers
             builder.Services.AddControllers()
+                 .AddOData(options => options
+                       .Select()
+                       .Filter()
+                       .OrderBy()
+                       .Expand()
+                       .Count()
+                       .SetMaxTop(100))
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters
@@ -108,6 +118,8 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            // Validators
+            builder.Services.AddScoped<IProjectValidator, ProjectValidator>();
 
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
@@ -126,6 +138,9 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseOutputCache();
 
             app.UseHttpsRedirection();
+
+            //Middleware
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseAuthentication();
 

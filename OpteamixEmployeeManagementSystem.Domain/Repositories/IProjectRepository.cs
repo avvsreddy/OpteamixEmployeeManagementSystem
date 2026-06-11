@@ -1,4 +1,5 @@
-﻿using OpteamixEmployeeManagementSystem.Domain.Entities;
+﻿using OpteamixEmployeeManagementSystem.Domain.DTOs;
+using OpteamixEmployeeManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +13,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.Repositories
         Task<Project> CreateProjectAsync(Project project);
         Task<Project?> UpdateProjectAsync(int id, Project project);
         Task<bool> DeleteProjectAsync(int id);
+        Task<ViewProjectSummaryDto> GetViewProjectSummaryAsync();
+        IQueryable<Project> GetAllProjectsQueryable();
     }
 }

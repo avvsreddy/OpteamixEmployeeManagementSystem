@@ -5,7 +5,7 @@
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class ProjectTables2 : Migration
+    public partial class AddIsDeletedToProject : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
