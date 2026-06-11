@@ -59,4 +59,4 @@ namespace OpteamixEmployeeManagementSystem.API.Services
             return Convert.ToBase64String(randomBytes);
         }
     }
-    }
+}

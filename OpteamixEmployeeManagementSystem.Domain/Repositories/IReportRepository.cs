@@ -1,5 +1,4 @@
 ﻿using OpteamixEmployeeManagementSystem.Domain.DTOs;
-using OpteamixEmployeeManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
