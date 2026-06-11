@@ -30,6 +30,8 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             _emailService = emailService;
         }
 
+
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
@@ -113,6 +115,34 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
                 Token = token,
                 RefreshToken = refreshToken
             });
+        }
+
+        [HttpGet("users")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = _userManager.Users.ToList();
+
+            var userList = new List<object>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userList.Add(new
+                {
+                    user.Id,
+                    user.FullName,
+                    user.Email,
+                    user.PhoneNumber,
+                    user.Department,
+                    user.Gender,
+                    user.EmployeeCode,
+                    user.CreatedDate,
+                    Roles = roles
+                });
+            }
+
+            return Ok(userList);
         }
 
 
