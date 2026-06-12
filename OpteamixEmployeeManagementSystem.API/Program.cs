@@ -7,13 +7,12 @@ using OpteamixEmployeeManagementSystem.API.Services;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.OData;
-using OpteamixEmployeeManagementSystem.API.Profiles;
-
-
-
-
 using OpteamixEmployeeManagementSystem.Data.Repository;
 using OpteamixEmployeeManagementSystem.Domain.BusinessValidators;
+using OpteamixEmployeeManagementSystem.Data;
+using OpteamixEmployeeManagementSystem.Domain.Entities;
+using OpteamixEmployeeManagementSystem.Domain.Settings;
+using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.API
 {
@@ -147,10 +146,7 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddScoped<
                 IReportRepository,
                 ReportRepository>();
-            // AutoMapper
-            builder.Services.AddAutoMapper(
-                typeof(MappingProfile));
-
+            
             var app = builder.Build();
 
             // Swagger

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using OpteamixEmployeeManagementSystem.Data.Repository;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
-using OpteamixEmployeeManagementSystem.Domain.DTOs;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
 {
@@ -116,6 +118,17 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
             }
 
             return NoContent();
+        }
+
+        // GET api/employees/odata
+        [HttpGet("odata")]
+        [EnableQuery]
+        [ProducesResponseType(typeof(IQueryable<Employee>), StatusCodes.Status200OK)]
+        public IActionResult GetAllOdata()
+        {
+            var employees = _repository.GetAllEmployeesQueryable();
+
+            return Ok(employees);
         }
     }
 }

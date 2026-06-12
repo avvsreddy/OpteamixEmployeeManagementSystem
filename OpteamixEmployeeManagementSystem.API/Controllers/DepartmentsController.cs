@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
+using OpteamixEmployeeManagementSystem.Domain.DTOs;
 
 namespace OpteamixEmployeeManagementSystem.API.Controllers
 {
@@ -46,9 +47,15 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult>
-            AddDepartment(
-                Department department)
+    AddDepartment(
+        CreateDepartmentDto dto)
         {
+            var department = new Department
+            {
+                Name = dto.Name,
+                Description = dto.Description
+            };
+
             var result =
                 await _repository
                     .AddDepartmentAsync(
@@ -65,15 +72,22 @@ namespace OpteamixEmployeeManagementSystem.API.Controllers
 
         [HttpPut("{id}")]
         public async Task<IActionResult>
-            UpdateDepartment(
-                int id,
-                Department department)
+    UpdateDepartment(
+        int id,
+        UpdateDepartmentDto dto)
         {
-            if (id != department.DepartmentId)
+            if (id != dto.DepartmentId)
             {
                 return BadRequest(
                     "Department ID mismatch");
             }
+
+            var department = new Department
+            {
+                DepartmentId = dto.DepartmentId,
+                Name = dto.Name,
+                Description = dto.Description
+            };
 
             var result =
                 await _repository

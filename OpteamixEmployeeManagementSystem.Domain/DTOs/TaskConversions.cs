@@ -8,7 +8,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
         {
             return new TaskDto
             {
-                TaskId = task.TaskId,
+                TaskItemId = task.TaskItemId,
                 Title = task.Title,
                 Description = task.Description,
                 Status = task.Status,
@@ -35,7 +35,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
         {
             return new TaskItem
             {
-                TaskId = dto.TaskId,
+                TaskItemId = dto.TaskItemId,
                 Title = dto.Title,
                 Description = dto.Description,
                 Status = dto.Status,

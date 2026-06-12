@@ -18,7 +18,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public async Task<List<Department>>
             GetDepartmentsAsync()
         {
-            return await _context.Department
+            return await _context.Departments
                 .ToListAsync();
         }
 
@@ -26,7 +26,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             GetDepartmentByIdAsync(
                 int departmentId)
         {
-            return await _context.Department
+            return await _context.Departments
                 .FirstOrDefaultAsync(
                     d => d.DepartmentId ==
                          departmentId);
@@ -36,7 +36,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             AddDepartmentAsync(
                 Department department)
         {
-            await _context.Department
+            await _context.Departments
                 .AddAsync(department);
 
             await _context.SaveChangesAsync();
@@ -49,7 +49,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                 Department department)
         {
             var existingDepartment =
-                await _context.Department
+                await _context.Departments
                 .FirstOrDefaultAsync(
                     d => d.DepartmentId ==
                          department.DepartmentId);
@@ -75,7 +75,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                 int departmentId)
         {
             var department =
-                await _context.Department
+                await _context.Departments
                 .FirstOrDefaultAsync(
                     d => d.DepartmentId ==
                          departmentId);
@@ -85,7 +85,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                 return false;
             }
 
-            _context.Department
+            _context.Departments
                 .Remove(department);
 
             await _context.SaveChangesAsync();

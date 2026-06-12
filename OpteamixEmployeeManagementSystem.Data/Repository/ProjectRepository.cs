@@ -20,7 +20,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
         {
             return await _context.Projects
-                .Where(p => !p.isDeleted)
+                .Where(p => !p.IsDeleted)
                 .Include(p => p.Manager)
                 .ToListAsync();
         }
@@ -29,7 +29,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         {
             return await _context.Projects
                 .Include(p => p.Manager)
-                .FirstOrDefaultAsync(p => p.ProjectId == id && !p.isDeleted);
+                .FirstOrDefaultAsync(p => p.ProjectId == id && !p.IsDeleted);
         }
 
         public async Task<Project> CreateProjectAsync(Project project)
@@ -41,7 +41,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
 
         public async Task<Project?> UpdateProjectAsync(int id, Project updatedProject)
         {
-            var existing = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id && !p.isDeleted);
+            var existing = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id && !p.IsDeleted);
 
             if (existing == null)
             {
@@ -62,19 +62,19 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
 
         public async Task<bool> DeleteProjectAsync(int id)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id && !p.isDeleted);
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id && !p.IsDeleted);
 
             if (project == null)
                 return false;
 
-            project.isDeleted = true;
+            project.IsDeleted = true;
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<ViewProjectSummaryDto> GetViewProjectSummaryAsync()
         {
-            var projects = await _context.Projects.Where(p => !p.isDeleted).ToListAsync();
+            var projects = await _context.Projects.Where(p => !p.IsDeleted).ToListAsync();
 
             return new ViewProjectSummaryDto
             {
@@ -93,7 +93,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public IQueryable<Project> GetAllProjectsQueryable()
         {
             return _context.Projects
-            .Where(p => !p.isDeleted)
+            .Where(p => !p.IsDeleted)
             .AsQueryable();
         }
     }

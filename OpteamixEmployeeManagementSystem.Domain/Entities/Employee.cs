@@ -42,20 +42,13 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
             ErrorMessage = "Salary must be positive")]
         public decimal Salary { get; set; }
 
-        // Soft Delete
         public bool IsDeleted { get; set; } = false;
 
-        // ==========================
-        // Department Relationship
-        // ==========================
 
         [Required(ErrorMessage = "Department is required")]
         public int DepartmentId { get; set; }
 
         public Department? Department { get; set; }
 
-        
-
-       
     }
 }
