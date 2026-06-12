@@ -11,6 +11,9 @@
   <Folder Name="/Entities/">
     <Project Path="EntitiesLibrary/EntitiesLibrary.csproj" Id="9dc3b236-9816-4bd9-bfc0-ec4dc4927ce3" />
   </Folder>
+  <Folder Name="/UnitTest Layer/">
+    <Project Path="UnitTesting/UnitTesting.csproj" Id="a301b620-7fe4-4362-8038-35eea1c15b99" />
+  </Folder>
   <Project Path="TestController/TestController.csproj" Id="757d9367-ddb6-4d77-a256-cb66d758510a" />
   <Project Path="TestValidator/TestValidator.csproj" Id="07fd5f14-fc48-4c10-b311-5e06051aca6f" />
 </Solution>
