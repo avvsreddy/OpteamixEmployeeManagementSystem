@@ -53,6 +53,8 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             existingEmployee.DepartmentId = employee.DepartmentId;
             existingEmployee.Designation = employee.Designation;
             existingEmployee.JoiningDate = employee.JoiningDate;
+            existingEmployee.EmployeeCode = employee.EmployeeCode;
+            existingEmployee.Salary = employee.Salary;
 
             await _context.SaveChangesAsync();
 
@@ -90,6 +92,13 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                     (e.Department != null &&
                      e.Department.Name.Contains(keyword)))
                 .ToListAsync();
+        }
+
+        public IQueryable<Employee> GetAllEmployeesQueryable()
+        {
+            return _context.Employees
+                .Where(e => !e.IsDeleted)
+                .AsQueryable();
         }
     }
 }

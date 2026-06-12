@@ -6,7 +6,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
     public class UpdateTaskDto
     {
         [Required]
-        public int TaskId { get; set; }
+        public int TaskItemId { get; set; }
 
         [Required]
         public string Title { get; set; } = string.Empty;

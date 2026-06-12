@@ -248,6 +248,28 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Department", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("DepartmentId");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -256,19 +278,22 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Designation")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -285,7 +310,12 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
                 });
@@ -308,6 +338,9 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
@@ -322,9 +355,6 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("ProjectId");
 
                     b.HasIndex("ManagerId");
@@ -334,11 +364,11 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
             modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.TaskItem", b =>
                 {
-                    b.Property<int>("TaskId")
+                    b.Property<int>("TaskItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskItemId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -360,7 +390,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TaskId");
+                    b.HasKey("TaskItemId");
 
                     b.HasIndex("EmployeeId");
 
@@ -420,11 +450,23 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Employee", b =>
+                {
+                    b.HasOne("OpteamixEmployeeManagementSystem.Domain.Entities.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
             modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Project", b =>
                 {
                     b.HasOne("OpteamixEmployeeManagementSystem.Domain.Entities.Employee", "Manager")
                         .WithMany()
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Manager");
                 });
@@ -433,18 +475,22 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                 {
                     b.HasOne("OpteamixEmployeeManagementSystem.Domain.Entities.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("OpteamixEmployeeManagementSystem.Domain.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee");
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.Department", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

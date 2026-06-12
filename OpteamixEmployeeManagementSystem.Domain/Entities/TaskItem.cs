@@ -5,7 +5,8 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
 {
     public class TaskItem
     {
-        public int TaskId { get; set; }
+        [Key]
+        public int TaskItemId { get; set; }
 
         [Required]
         public string Title { get; set; } = string.Empty;

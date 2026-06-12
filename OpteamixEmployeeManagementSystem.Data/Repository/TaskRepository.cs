@@ -25,7 +25,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         {
             return await _context.Tasks
                 .FirstOrDefaultAsync(
-                    t => t.TaskId == taskId);
+                    t => t.TaskItemId == taskId);
         }
 
         public async Task<TaskItem?> AddTaskAsync(
@@ -65,7 +65,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             var existingTask =
                 await _context.Tasks
                 .FirstOrDefaultAsync(
-                    t => t.TaskId == task.TaskId);
+                    t => t.TaskItemId == task.TaskItemId);
 
             if (existingTask != null)
             {
@@ -99,7 +99,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             var task =
                 await _context.Tasks
                 .FirstOrDefaultAsync(
-                    t => t.TaskId == taskId);
+                    t => t.TaskItemId == taskId);
 
             if (task == null)
                 return false;
@@ -148,7 +148,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             var task =
                 await _context.Tasks
                 .FirstOrDefaultAsync(
-                    t => t.TaskId == taskId);
+                    t => t.TaskItemId == taskId);
 
             if (task == null)
                 return false;
@@ -175,7 +175,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             var task =
                 await _context.Tasks
                 .FirstOrDefaultAsync(
-                    t => t.TaskId == taskId);
+                    t => t.TaskItemId == taskId);
 
             if (task == null)
                 return false;
@@ -203,7 +203,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             var task =
                 await _context.Tasks
                 .FirstOrDefaultAsync(
-                    t => t.TaskId == taskId);
+                    t => t.TaskItemId == taskId);
 
             if (task == null)
                 return false;

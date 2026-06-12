@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 {
@@ -6,6 +7,9 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
     {
         [Required]
         public int EmployeeId { get; set; }
+
+        [Required]
+        public string EmployeeCode { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(100)]
@@ -29,5 +33,8 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 
         [Required]
         public DateTime JoiningDate { get; set; }
+
+        [Required]
+        public decimal Salary { get; set; }
     }
 }

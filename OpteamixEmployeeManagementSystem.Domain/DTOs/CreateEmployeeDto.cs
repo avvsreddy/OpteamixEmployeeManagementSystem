@@ -26,5 +26,11 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 
         [Required(ErrorMessage = "Joining Date is required")]
         public DateTime JoiningDate { get; set; }
+
+        [Required(ErrorMessage ="Salary is required")]
+        public decimal Salary { get; set; }
+
+        [Required(ErrorMessage ="Employee code is required")]
+        public string EmployeeCode { get; set; } = string.Empty;
     }
 }

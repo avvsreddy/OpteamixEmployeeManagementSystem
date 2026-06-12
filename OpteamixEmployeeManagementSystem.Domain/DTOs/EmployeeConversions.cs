@@ -4,12 +4,13 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 {
     public static class EmployeeConversions
     {
-        // Entity -> DTO
         public static EmployeeDto FromEntity(Employee employee)
         {
             return new EmployeeDto
             {
                 EmployeeId = employee.EmployeeId,
+                EmployeeCode = employee.EmployeeCode,
+
                 Name = employee.Name,
                 Email = employee.Email,
                 PhoneNumber = employee.PhoneNumber,
@@ -21,15 +22,18 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 
                 Designation = employee.Designation,
 
-                JoiningDate = employee.JoiningDate
+                JoiningDate = employee.JoiningDate,
+
+                Salary = employee.Salary
             };
         }
 
-        // CreateEmployeeDto -> Entity
         public static Employee ToEntity(CreateEmployeeDto dto)
         {
             return new Employee
             {
+                EmployeeCode = dto.EmployeeCode,
+
                 Name = dto.Name,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
@@ -38,17 +42,20 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 
                 Designation = dto.Designation,
 
-                JoiningDate = dto.JoiningDate
+                JoiningDate = dto.JoiningDate,
+
+                Salary = dto.Salary
             };
         }
 
-        // UpdateEmployeeDto -> Entity
         public static Employee ToEntity(UpdateEmployeeDto dto)
         {
             return new Employee
             {
                 EmployeeId = dto.EmployeeId,
 
+                EmployeeCode = dto.EmployeeCode,
+
                 Name = dto.Name,
 
                 Email = dto.Email,
@@ -59,7 +66,9 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 
                 Designation = dto.Designation,
 
-                JoiningDate = dto.JoiningDate
+                JoiningDate = dto.JoiningDate,
+
+                Salary = dto.Salary
             };
         }
     }

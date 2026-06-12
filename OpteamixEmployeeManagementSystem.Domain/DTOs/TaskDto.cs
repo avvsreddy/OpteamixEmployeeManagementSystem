@@ -4,7 +4,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.DTOs
 {
     public class TaskDto
     {
-        public int TaskId { get; set; }
+        public int TaskItemId { get; set; }
 
         public string Title { get; set; } = string.Empty;
 
