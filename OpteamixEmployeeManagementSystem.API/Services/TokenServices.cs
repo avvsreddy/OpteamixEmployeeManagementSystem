@@ -15,7 +15,7 @@ namespace OpteamixEmployeeManagementSystem.API.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(
+        public  virtual string GenerateToken(
             string userId,
             string username,
             string role)
@@ -51,7 +51,7 @@ namespace OpteamixEmployeeManagementSystem.API.Services
                 .WriteToken(token);
         }
 
-        public string GenerateRefreshToken()
+        public virtual string GenerateRefreshToken()
         {
             var randomBytes = new byte[64];
             using var rng = RandomNumberGenerator.Create();
