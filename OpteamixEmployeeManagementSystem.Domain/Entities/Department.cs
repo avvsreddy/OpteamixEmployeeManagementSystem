@@ -1,5 +1,4 @@
-﻿using EntitiesLibrary;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OpteamixEmployeeManagementSystem.Domain.Entities
 {
@@ -7,6 +6,8 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
     {
         public int DepartmentId { get; set; }
 
+        [Required]
+        [StringLength(100)]
         public string Name { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;

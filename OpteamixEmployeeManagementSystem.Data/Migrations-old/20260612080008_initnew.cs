@@ -5,7 +5,7 @@
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class t : Migration
+    public partial class initnew : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

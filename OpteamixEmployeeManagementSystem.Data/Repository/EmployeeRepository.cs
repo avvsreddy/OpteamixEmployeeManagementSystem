@@ -2,6 +2,7 @@
 using OpteamixEmployeeManagementSystem.Domain.Entities;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
+
 namespace OpteamixEmployeeManagementSystem.Data.Repository
 {
     public class EmployeeRepository : IEmployeeRepository
@@ -34,26 +35,30 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
             return employee;
         }
 
-        public async Task<Employee> UpdateEmployeeAsync(Employee employee)
+        public async Task<Employee?> UpdateEmployeeAsync(Employee employee)
         {
             var existingEmployee =
                 await _context.Employees
                 .FirstOrDefaultAsync(
                     e => e.EmployeeId == employee.EmployeeId);
 
-            if (existingEmployee != null)
+            if (existingEmployee == null)
             {
-                existingEmployee.Name = employee.Name;
-                existingEmployee.Email = employee.Email;
-                existingEmployee.PhoneNumber = employee.PhoneNumber;
-                existingEmployee.Department = employee.Department;
-                existingEmployee.Designation = employee.Designation;
-                existingEmployee.JoiningDate = employee.JoiningDate;
-
-                await _context.SaveChangesAsync();
+                return null;
             }
 
-            return employee;
+            existingEmployee.Name = employee.Name;
+            existingEmployee.Email = employee.Email;
+            existingEmployee.PhoneNumber = employee.PhoneNumber;
+            existingEmployee.DepartmentId = employee.DepartmentId;
+            existingEmployee.Designation = employee.Designation;
+            existingEmployee.JoiningDate = employee.JoiningDate;
+            existingEmployee.EmployeeCode = employee.EmployeeCode;
+            existingEmployee.Salary = employee.Salary;
+
+            await _context.SaveChangesAsync();
+
+            return existingEmployee;
         }
 
         public async Task<bool> DeleteEmployeeAsync(int employeeId)
@@ -64,13 +69,36 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                     e => e.EmployeeId == employeeId);
 
             if (employee == null)
+            {
                 return false;
+            }
 
             _context.Employees.Remove(employee);
 
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<Employee>> SearchEmployeesAsync(
+    string keyword)
+        {
+            return await _context.Employees
+                .Include(e => e.Department)
+                .Where(e =>
+                    e.Name.Contains(keyword) ||
+                    e.Email.Contains(keyword) ||
+                    e.Designation.Contains(keyword) ||
+                    (e.Department != null &&
+                     e.Department.Name.Contains(keyword)))
+                .ToListAsync();
+        }
+
+        public IQueryable<Employee> GetAllEmployeesQueryable()
+        {
+            return _context.Employees
+                .Where(e => !e.IsDeleted)
+                .AsQueryable();
         }
     }
 }

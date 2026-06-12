@@ -12,8 +12,9 @@ using OpteamixEmployeeManagementSystem.Data;
 namespace OpteamixEmployeeManagementSystem.Data.Migrations
 {
     [DbContext(typeof(EmployeeDbContext))]
-    [Migration("20260610050347_AddIsDeletedToProject")]
-    partial class AddIsDeletedToProject
+
+    [Migration("20260610043426_Project")]
+    partial class Project
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -261,22 +262,28 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
                     b.Property<string>("Department")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Designation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("JoiningDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -331,11 +338,11 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
 
             modelBuilder.Entity("OpteamixEmployeeManagementSystem.Domain.Entities.TaskItem", b =>
                 {
-                    b.Property<int>("TaskId")
+                    b.Property<int>("TaskItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskItemId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -357,7 +364,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TaskId");
+                    b.HasKey("TaskItemId");
 
                     b.HasIndex("EmployeeId");
 
