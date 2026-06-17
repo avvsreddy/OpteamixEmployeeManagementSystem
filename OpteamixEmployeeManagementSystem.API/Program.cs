@@ -22,6 +22,18 @@ namespace OpteamixEmployeeManagementSystem.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AngularPolicy",
+                    policy =>
+                    {
+                        policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             // Controllers
             builder.Services.AddControllers()
                  .AddOData(options => options
@@ -139,6 +151,8 @@ namespace OpteamixEmployeeManagementSystem.API
                 IProjectRepository,
                 ProjectRepository>();
 
+            builder.Services.AddScoped<IProjectValidator, ProjectValidator>();
+
             builder.Services.AddScoped<
                 ITaskRepository,
                 TaskRepository>();
@@ -148,6 +162,8 @@ namespace OpteamixEmployeeManagementSystem.API
                 ReportRepository>();
             
             var app = builder.Build();
+
+            app.UseCors("AngularPolicy");
 
             // Swagger
             if (app.Environment.IsDevelopment())
