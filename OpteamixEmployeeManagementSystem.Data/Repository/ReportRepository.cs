@@ -35,14 +35,14 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         {
             return await _context.Employees
                 .AsNoTracking()
-                .CountAsync();
+                .CountAsync(e => !e.IsDeleted);
         }
 
         public async Task<int> GetTotalProjectsAsync()
         {
             return await _context.Projects
                 .AsNoTracking()
-                .CountAsync();
+                .CountAsync(p => !p.IsDeleted);
         }
 
         public async Task<int> GetTotalTasksAsync()
@@ -55,6 +55,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public async Task<ProjectStatusSummaryDto> GetProjectStatusSummaryAsync()
         {
             var projects = await _context.Projects
+                .Where(p => !p.IsDeleted)
                 .AsNoTracking()
                 .GroupBy(p => p.Status)
                 .Select(g => new
