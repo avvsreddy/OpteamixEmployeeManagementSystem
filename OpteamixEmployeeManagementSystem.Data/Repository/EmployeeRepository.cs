@@ -16,12 +16,13 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
 
         public async Task<List<Employee>> GetEmployeesAsync()
         {
-            return await _context.Employees.ToListAsync();
+            return await _context.Employees.Include(e => e.Department).ToListAsync(); 
         }
 
         public async Task<Employee?> GetEmployeeByIdAsync(int employeeId)
         {
             return await _context.Employees
+                .Include(e => e.Department) 
                 .FirstOrDefaultAsync(
                     e => e.EmployeeId == employeeId);
         }

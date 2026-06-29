@@ -54,16 +54,16 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public async Task<ProjectStatusSummaryDto> GetProjectStatusSummaryAsync()
         {
             var projects = await _context.Projects
-                .IgnoreQueryFilters()
-                .AsNoTracking()
-                .Where(p => !p.IsDeleted)
-                .GroupBy(p => p.Status)
-                .Select(g => new
-                {
-                    Status = g.Key,
-                    Count = g.Count()
-                })
-                .ToListAsync();
+    .IgnoreQueryFilters()
+    .AsNoTracking()
+    .Where(p => !p.IsDeleted)
+    .GroupBy(p => p.Status)
+    .Select(g => new
+    {
+        Status = g.Key,
+        Count = g.Count()
+    })
+    .ToListAsync();
 
             return new ProjectStatusSummaryDto
             {
