@@ -110,6 +110,26 @@ namespace OpteamixEmployeeManagementSystem.API
 
             // Authorization
             builder.Services.AddAuthorization();
+            string corsAllowAllPolicy = "AllowAll";
+
+
+            builder.Services.AddCors(options =>
+            {
+
+                options.AddPolicy(name: corsAllowAllPolicy,
+
+                                  policy =>
+                                  {
+
+                                      policy.AllowAnyOrigin()
+
+                                            .AllowAnyMethod()
+
+                                            .AllowAnyHeader();
+
+                                  });
+
+            });
 
             // Services
             builder.Services.AddScoped<TokenServices>();
@@ -138,7 +158,6 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddScoped<
                 IProjectRepository,
                 ProjectRepository>();
-
             builder.Services.AddScoped<
                 ITaskRepository,
                 TaskRepository>();
@@ -146,7 +165,13 @@ namespace OpteamixEmployeeManagementSystem.API
             builder.Services.AddScoped<
                 IReportRepository,
                 ReportRepository>();
+
+            builder.Services.AddScoped<
+    IProjectValidator,
+    ProjectValidator>(); ///////////Changed this
+
             
+
             var app = builder.Build();
 
             // Swagger
@@ -160,10 +185,11 @@ namespace OpteamixEmployeeManagementSystem.API
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
+            app.UseCors(corsAllowAllPolicy);
 
             //Middleware
             app.UseMiddleware<GlobalExceptionMiddleware>();
-
+            //app.UseCors(corsAllowAllPolicy);    
             app.UseAuthentication();
 
             app.UseAuthorization();

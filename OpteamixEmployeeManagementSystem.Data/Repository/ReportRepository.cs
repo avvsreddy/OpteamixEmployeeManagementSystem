@@ -2,9 +2,6 @@
 using OpteamixEmployeeManagementSystem.Domain.DTOs;
 using OpteamixEmployeeManagementSystem.Domain.Enums;
 using OpteamixEmployeeManagementSystem.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpteamixEmployeeManagementSystem.Data.Repository
 {
@@ -21,28 +18,30 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         {
             return await _context.Tasks
                 .AsNoTracking()
-                .CountAsync(e => e.Status == TaskItemStatus.Completed);
+                .CountAsync(t => t.Status == TaskItemStatus.Completed);
         }
 
         public async Task<int> GetPendingTasksAsync()
         {
             return await _context.Tasks
                 .AsNoTracking()
-                .CountAsync(e => e.Status != TaskItemStatus.Completed);
+                .CountAsync(t => t.Status != TaskItemStatus.Completed);
         }
 
         public async Task<int> GetTotalEmployeesAsync()
         {
             return await _context.Employees
+                .IgnoreQueryFilters()
                 .AsNoTracking()
-                .CountAsync();
+                .CountAsync(e => !e.IsDeleted);
         }
 
         public async Task<int> GetTotalProjectsAsync()
         {
             return await _context.Projects
+                .IgnoreQueryFilters()
                 .AsNoTracking()
-                .CountAsync();
+                .CountAsync(p => !p.IsDeleted);
         }
 
         public async Task<int> GetTotalTasksAsync()
@@ -55,7 +54,9 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
         public async Task<ProjectStatusSummaryDto> GetProjectStatusSummaryAsync()
         {
             var projects = await _context.Projects
+                .IgnoreQueryFilters()
                 .AsNoTracking()
+                .Where(p => !p.IsDeleted)
                 .GroupBy(p => p.Status)
                 .Select(g => new
                 {

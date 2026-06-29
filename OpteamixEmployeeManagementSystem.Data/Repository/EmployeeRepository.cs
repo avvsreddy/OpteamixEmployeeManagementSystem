@@ -73,7 +73,7 @@ namespace OpteamixEmployeeManagementSystem.Data.Repository
                 return false;
             }
 
-            _context.Employees.Remove(employee);
+            employee.IsDeleted = true;
 
             await _context.SaveChangesAsync();
 

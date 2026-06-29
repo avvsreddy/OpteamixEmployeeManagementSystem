@@ -4,89 +4,73 @@ using OpteamixEmployeeManagementSystem.Domain.Repositories;
 
 namespace OpteamixEmployeeManagementSystem.Data.Repository
 {
-    public class DepartmentRepository
-        : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         private readonly EmployeeDbContext _context;
 
-        public DepartmentRepository(
-            EmployeeDbContext context)
+        public DepartmentRepository(EmployeeDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<Department>>
-            GetDepartmentsAsync()
+        public async Task<List<Department>> GetDepartmentsAsync()
         {
-            return await _context.Departments
-                .ToListAsync();
+            return await _context.Departments.ToListAsync();
         }
 
-        public async Task<Department?>
-            GetDepartmentByIdAsync(
-                int departmentId)
+        public async Task<Department?> GetDepartmentByIdAsync(
+            int departmentId)
         {
             return await _context.Departments
                 .FirstOrDefaultAsync(
-                    d => d.DepartmentId ==
-                         departmentId);
+                    d => d.DepartmentId == departmentId);
         }
 
-        public async Task<Department>
-            AddDepartmentAsync(
-                Department department)
+        public async Task<Department> AddDepartmentAsync(
+            Department department)
         {
-            await _context.Departments
-                .AddAsync(department);
+            await _context.Departments.AddAsync(department);
 
             await _context.SaveChangesAsync();
 
             return department;
         }
 
-        public async Task<Department?>
-            UpdateDepartmentAsync(
-                Department department)
+        public async Task<Department?> UpdateDepartmentAsync(
+            Department department)
         {
             var existingDepartment =
                 await _context.Departments
                 .FirstOrDefaultAsync(
-                    d => d.DepartmentId ==
-                         department.DepartmentId);
+                    d => d.DepartmentId == department.DepartmentId);
 
             if (existingDepartment == null)
             {
                 return null;
             }
 
-            existingDepartment.Name =
-                department.Name;
-
-            existingDepartment.Description =
-                department.Description;
+            existingDepartment.Name = department.Name;
+            existingDepartment.Description = department.Description;
 
             await _context.SaveChangesAsync();
 
             return existingDepartment;
         }
 
-        public async Task<bool>
-            DeleteDepartmentAsync(
-                int departmentId)
+        public async Task<bool> DeleteDepartmentAsync(
+            int departmentId)
         {
             var department =
                 await _context.Departments
                 .FirstOrDefaultAsync(
-                    d => d.DepartmentId ==
-                         departmentId);
+                    d => d.DepartmentId == departmentId);
 
             if (department == null)
             {
                 return false;
             }
 
-            _context.Departments
-                .Remove(department);
+            department.IsDeleted = true;
 
             await _context.SaveChangesAsync();
 

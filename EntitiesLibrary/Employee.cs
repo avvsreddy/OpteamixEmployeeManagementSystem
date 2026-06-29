@@ -1,4 +1,6 @@
-﻿namespace EntitiesLibrary
+﻿using OpteamixEmployeeManagementSystem.Domain.Entities;
+
+namespace EntitiesLibrary
 {
     public class Employee : BaseEntity
     {

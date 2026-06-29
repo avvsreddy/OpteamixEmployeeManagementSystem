@@ -15,37 +15,34 @@ namespace OpteamixEmployeeManagementSystem.API.Services
             _configuration = configuration;
         }
 
-        public  virtual string GenerateToken(
+        public virtual string GenerateToken(
             string userId,
             string username,
             string role)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,userId),
-                new Claim(ClaimTypes.Name,username),
-                new Claim(ClaimTypes.Role,role)
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role)
             };
 
-            var key =
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(
-                        _configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    _configuration["Jwt:Key"]!));
 
-            var credentials =
-                new SigningCredentials(
-                    key,
-                    SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256);
 
-            var token =
-                new JwtSecurityToken(
-                    issuer: _configuration["Jwt:Issuer"],
-                    audience: _configuration["Jwt:Audience"],
-                    claims: claims,
-                    expires: DateTime.UtcNow.AddMinutes(
-                        Convert.ToInt32(
-                            _configuration["Jwt:DurationInMinutes"])),
-                    signingCredentials: credentials);
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(
+                    Convert.ToInt32(
+                        _configuration["Jwt:DurationInMinutes"])),
+                signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler()
                 .WriteToken(token);
@@ -54,8 +51,11 @@ namespace OpteamixEmployeeManagementSystem.API.Services
         public virtual string GenerateRefreshToken()
         {
             var randomBytes = new byte[64];
+
             using var rng = RandomNumberGenerator.Create();
+
             rng.GetBytes(randomBytes);
+
             return Convert.ToBase64String(randomBytes);
         }
     }

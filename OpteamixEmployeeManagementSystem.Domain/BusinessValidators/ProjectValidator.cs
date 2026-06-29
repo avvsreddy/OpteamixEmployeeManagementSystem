@@ -54,7 +54,7 @@ namespace OpteamixEmployeeManagementSystem.Domain.BusinessValidators
 
             if (dto.StartDate > dto.EndDate)
             {
-                throw new Exception("Start Date cannot be greater than End Date");
+                throw new   Exception("Start Date cannot be greater than End Date");
             }
 
             if (dto.Budget <= 0)

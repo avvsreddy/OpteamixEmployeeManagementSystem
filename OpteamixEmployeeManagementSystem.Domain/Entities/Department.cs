@@ -12,6 +12,8 @@ namespace OpteamixEmployeeManagementSystem.Domain.Entities
 
         public string Description { get; set; } = string.Empty;
 
+        public bool IsDeleted { get; set; } = false;
+
         public ICollection<Employee> Employees { get; set; }
             = new List<Employee>();
     }
